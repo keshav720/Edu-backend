@@ -1,43 +1,46 @@
+require("dotenv").config();
 const express = require("express");
-const mysql = require("mysql");
-const cookieParser = require("cookie-parser");
-const session = require("express-session");
-const cors = require("cors");
-const dbConfig = require("./src/config/db.Config");
-
 const app = express();
-const port = process.env.PORT || 8000;
-
-const connection = mysql.createConnection({
-  host: dbConfig.host,
-  user: dbConfig.user,
-  password: dbConfig.password,
-  database: dbConfig.database,
-});
-connection.connect((err) => {
-  if (err) throw err;
-  console.log("Connected to MySQL database");
-});
-const memoryStore = new session.MemoryStore();
-
-app.use(
-  session({
-    secret: "some secret",
-    resave: false,
-    saveUninitialized: true,
-    store: memoryStore,
-  })
-);
-
-app.use(express.json());
-app.use(express.urlencoded({ extended: false }));
-app.use(cookieParser(process.env.COOKIE_SECRET));
+const logger = require("morgan");
+const cors = require("cors");
+const { db } = require("./src/models");
+const indexRouter = require("./routes/api");
+app.use(cors());
+app.options("*", cors());
 
 app.use(cors());
 app.options("*", cors());
-app.get('/',(req,res)=>{
-    res.send("Hi,we are developing educational website.");
+
+app.use(logger("dev"));
+app.use(express.json());
+app.use(express.static("public"));
+app.use(express.urlencoded({ extended: true }));
+ 
+app.use("/api", indexRouter);
+
+// Routes
+app.get("/", (req, res) => {
+  res.send({ success: true, message: "Welcome to Educational Website!" });
 });
-app.listen(port, () => {
-  console.log(`Server is running on port ${port}`);
+
+// Sync sequelize models and then start express server
+db.sequelize
+  .sync()
+  .then(() => {
+    console.log("Synced db.");
+  })
+  .catch((err) => {
+    console.log("Failed to sync db: " + err.message);
+  });
+// proddb.sequelize
+//   .sync()
+//   .then(() => {
+//     console.log("Synced prod db.");
+//   })
+//   .catch((err) => {
+//     console.log("Failed to sync prod db: " + err);
+//   });
+const PORT = process.env.PORT || 8000;
+app.listen(PORT, () => {
+  console.log(`Server is running on port http://localhost:${PORT}`);
 });

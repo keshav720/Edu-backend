@@ -1,37 +1,31 @@
-// models/User.js
+// models/course.js
 module.exports = (sequelize, Sequelize) => {
-    const User = sequelize.define(
-      "User",
+    const CourseContent = sequelize.define(
+      "CourseContent",
       {
         id: {
           type: Sequelize.UUID,
           defaultValue: Sequelize.UUIDV4,
           primaryKey: true,
         },
-        name: {
+        title: {
           type: Sequelize.STRING,
-          allowNull: false,
+          allowNull: true,
         },
-        email: {
+        description: {
           type: Sequelize.STRING,
-          allowNull: false,
-          unique: true,
+          allowNull: true,
         },
-        password: {
+        image: {
           type: Sequelize.STRING, 
-          allowNull: false,
+          allowNull: true,
         },
-        role: {
-          type: Sequelize.ENUM("admin", "user"),
-          defaultValue: "user",
-        },
-        
       },
       {
         timestamps: true,
       }
     );
   
-    return User;
+    return CourseContent;
   };
   
