@@ -15,7 +15,7 @@ app.use(logger("dev"));
 app.use(express.json());
 app.use(express.static("public"));
 app.use(express.urlencoded({ extended: true }));
- 
+
 app.use("/api", indexRouter);
 
 // Routes
@@ -23,14 +23,13 @@ app.get("/", (req, res) => {
   res.send({ success: true, message: "Welcome to Educational Website!" });
 });
 
-// Sync sequelize models and then start express server
 db.sequelize
   .sync()
   .then(() => {
     console.log("Synced db.");
   })
   .catch((err) => {
-    console.log("Failed to sync db: " + err.message);
+    console.log("Failed to sync db: " + err);
   });
 // proddb.sequelize
 //   .sync()

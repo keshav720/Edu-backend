@@ -3,16 +3,6 @@ const env = process.env.NODE_ENV || "development";
 const config = require("../config/db.Config");
 
 // const sequelize = new Sequelize(
-//   config.env.development.database,
-//   config.env.development.username,
-//   config.env.development.password,
-//   {
-//     host: config.env.development.host,
-//     dialect: config.env.development.dialect,
-//   }
-// );
-// console.log("sequelize---", sequelize.config);
-// const sequelize = new Sequelize(
 //   config.env.production.database,
 //   config.env.production.username,
 //   config.env.production.password,
@@ -21,26 +11,17 @@ const config = require("../config/db.Config");
 //     dialect: config.env.production.dialect,
 //   }
 // );
-const sequelize = new Sequelize(
-  config.env.production.database,
-  config.env.production.username,
-  config.env.production.password,
-  {
-    host: config.env.production.host,
-    dialect: config.env.production.dialect,
-  }
-);
-// const sequelizeProd = new Sequelize("eduapp", "rootroot", "root", {
-//   host: "eduapp.c7iikiw0apqk.eu-north-1.rds.amazonaws.com",
-//   dialect: "mysql",
-//   dialectOptions: {
-//     ssl: {
-//       require: true,
-//       rejectUnauthorized: false,
-//     },
-//   },
-// });
-console.log("sequelizeProd---", sequelize.config);
+const sequelize = new Sequelize("eduapp", "root", "rootroot", {
+  host: "eduapp.cp64aougcjxy.ap-south-1.rds.amazonaws.com",
+  dialect: "mysql",
+  dialectOptions: {
+    ssl: {
+      require: true,
+      rejectUnauthorized: false,
+    },
+  },
+});
+// console.log("sequelizeProd---", sequelize.config);
 
 // const db = {};
 const db = {};
@@ -133,7 +114,6 @@ db.Test.hasMany(db.UserTest, {
   foreignKey: "testId",
   as: "UserTest",
 });
-
 
 // db.CourseContent=require("./courses/courseContent.model.js")(sequelize,Sequelize);
 // // Mapping course content with course
